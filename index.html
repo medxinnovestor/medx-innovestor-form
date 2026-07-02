@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html lang="th">
+    <!-- Supabase Library -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -5467,4 +5470,55 @@ dEVYdGV4aWY6WUNiQ3JQb3NpdGlvbmluZwAxrA+AYwAAAABJRU5ErkJggg==" alt="ชมรม 
     document.body.appendChild(charOverlay);
     </script>
 </body>
+    <script>
+const SUPABASE_URL = 'https://qzyrmaevbamcearlhbcr.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_VM2a1y_L0KwHb1FPAH9zEw_jkgHLmLV_';
+
+const { createClient } = window.supabase;
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+async function handleSubmit() {
+  try {
+    const form = document.querySelector('form');
+    if (!form) {
+      alert('ไม่พบ form');
+      return;
+    }
+    
+    const formData = new FormData(form);
+    
+    const data = {
+      full_name: formData.get('fullName') || formData.get('full_name') || '',
+      email: formData.get('email') || '',
+      phone: formData.get('phone') || '',
+      year_level: formData.get('yearLevel') || formData.get('year_level') || '',
+      faculty: formData.get('faculty') || '',
+      motivation: formData.get('motivation') || '',
+      experience: formData.get('experience') || '',
+      goals: formData.get('goals') || '',
+      availability: formData.get('availability') || ''
+    };
+    
+    const { error } = await supabase
+      .from('medx_applications')
+      .insert([data]);
+    
+    if (error) {
+      alert('❌ บันทึกไม่สำเร็จ: ' + error.message);
+      return;
+    }
+    
+    alert('✅ บันทึกสำเร็จ! ขอบคุณที่สนใจ');
+    form.reset();
+  } catch (err) {
+    alert('❌ เกิดข้อผิดพลาด: ' + err.message);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const btn = document.querySelector('.submit-btn');
+  if (btn) btn.addEventListener('click', handleSubmit);
+});
+</script>
+
 </html>
